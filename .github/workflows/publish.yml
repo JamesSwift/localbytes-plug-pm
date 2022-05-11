@@ -10,8 +10,6 @@ jobs:
     uses: esphome/workflows/.github/workflows/publish.yml@main
     with:
       # CHANGEME: Set the filenames of your config files here:
-      files: 
-        - localbytes-plug-pm-v2.yaml
-        - minimal.yaml
+      files: localbytes-plug-pm-v2.yaml,minimal.yaml
       # CHANGEME: Set the name of your project here:
       name: Local Bytes Power Monitor Smart Plug V2
