@@ -1,0 +1,64 @@
+# These substitutions allow the end user to override certain values
+substitutions:
+  # Device Names
+  name: "localbytes-plug-pm-v2"
+  friendly_name: "Localbytes Plug V2"
+
+  # Icon
+  main_icon: "power-socket-uk"
+
+  # Default Relay State
+  # Aka: `restore_mode` in documentation
+  # Options: `RESTORE_DEFAULT_OFF`, `RESTORE_DEFAULT_ON`, `ALWAYS_ON` & `ALWAYS_OFF`
+  default_state: "RESTORE_DEFAULT_OFF"
+
+  # Activity State Threshold
+  # Threshold (number) that the device will change from `Idle` to `Active` if power is greater than or equal to
+  activity_threshold: "5"
+
+  # Power Monitor Calibration
+  # Calibrate is done by plugging in a known-good power monitoring plug to this plug, then a large load
+  # such as a kettle or heater into that plug. Monitor the logs and update the values below. 
+  # "*_raw" is the raw reading given in the logs 
+  # "*_actual" is the real reading taken from the known-good power monitor
+  
+  v_raw: "790"
+  v_actual: "238"
+  
+  p_raw: "18163"
+  p_actual: "2417"
+  
+  c_raw: "12.6"
+  c_actual: "10.148"
+
+esphome:
+  name: "${name}"
+  # Automatically add the mac address to the name
+  # so you can use a single firmware for all devices
+  name_add_mac_suffix: true
+
+  # This will allow for (future) project identification,
+  # configuration and updates.
+  project:
+    name: localbytes.plug-pm-v2
+    version: "1.0"
+
+esp8266:
+  board: esp01_1m
+
+logger:
+
+api:
+
+ota:
+
+# This should point to the public location of this yaml file.
+dashboard_import:
+  package_import_url: github://JamesSwift/localbytes-plug-pm-v2/localbytes-plug-pm-v2.yaml@main
+
+wifi:
+  output_power: 12
+  ap:
+    ssid: "${friendly_name} Fallback"
+
+captive_portal:
