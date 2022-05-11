@@ -1,6 +1,6 @@
 # About
 
-Add some information about your project here.
+<a href="https://www.mylocalbytes.com/products/smart-plug-pm?variant=41600621510847">Buy these devices from here</a>.
 
 # Installation
 

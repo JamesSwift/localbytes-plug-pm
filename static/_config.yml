@@ -1,4 +1,4 @@
 # CHANGEME: Set these variable to your liking
-title: ESPHome Project Template
-description: Powered by ESPHome and ESP Web Tools
+title: Local Bytes Power Monitor Smart Plug V2
+description: ESPHome firmware for localbytes power monitoring smart plug (v2)
 theme: jekyll-theme-slate
