@@ -59,7 +59,7 @@ dashboard_import:
 wifi:
   output_power: 12
   ap:
-    ssid: "${friendly_name} Fallback"
+    ssid: "${friendly_name}"
 
 captive_portal:
 

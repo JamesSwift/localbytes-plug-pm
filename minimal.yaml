@@ -55,8 +55,7 @@ dashboard_import:
   package_import_url: github://JamesSwift/localbytes-plug-pm-v2/localbytes-plug-pm-v2.yaml@main
 
 wifi:
-  output_power: 12
   ap:
-    ssid: "${friendly_name} Fallback"
+    ssid: "${friendly_name} Minimal"
 
 captive_portal:
