@@ -1,0 +1,185 @@
+# These substitutions allow the end user to override certain values
+substitutions:
+  # Device Names
+  name: "localbytes-plug-pm-v2"
+  friendly_name: "Localbytes Smart Plug V2"
+
+  # Icon
+  main_icon: "power-socket-uk"
+
+  # Default Relay State
+  # Aka: `restore_mode` in documentation
+  # Options: `RESTORE_DEFAULT_OFF`, `RESTORE_DEFAULT_ON`, `ALWAYS_ON` & `ALWAYS_OFF`
+  default_state: "RESTORE_DEFAULT_OFF"
+
+  # Activity State Threshold
+  # Threshold (number) that the device will change from `Idle` to `Active` if power is greater than or equal to
+  activity_threshold: "5"
+
+  # Power Monitor Calibration
+  # Calibrate is done by plugging in a known-good power monitoring plug to this plug, then a large load
+  # such as a kettle or heater into that plug. Monitor the logs and update the values below. 
+  # "*_raw" is the raw reading given in the logs 
+  # "*_actual" is the real reading taken from the known-good power monitor
+  
+  v_raw: "790"
+  v_actual: "238"
+  
+  p_raw: "18163"
+  p_actual: "2417"
+  
+  c_raw: "12.6"
+  c_actual: "10.148"
+
+esphome:
+  name: "${name}"
+  # Automatically add the mac address to the name
+  # so you can use a single firmware for all devices
+  name_add_mac_suffix: true
+
+  # This will allow for (future) project identification,
+  # configuration and updates.
+  project:
+    name: localbytes.plug-pm-v2
+    version: "1.0"
+
+esp8266:
+  board: esp01_1m
+
+logger:
+
+api:
+
+ota:
+
+# This should point to the public location of this yaml file.
+dashboard_import:
+  package_import_url: github://JamesSwift/localbytes-plug-pm-v2/localbytes-plug-pm-v2.yaml@main
+
+wifi:
+  output_power: 12
+  ap:
+    ssid: "${name} Fallback Hotspot"
+
+captive_portal:
+
+
+web_server:
+  port: 80
+
+time:
+  - platform: homeassistant
+
+binary_sensor:
+  # Push Button (Toggles Relay When Pressed)
+  - platform: gpio
+    pin:
+      number: GPIO3
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "${friendly_name} Button"
+    on_press:
+      - switch.toggle: relay
+  - platform: status
+    name: "${friendly_name} Server Status"
+
+switch:
+  # Relay (As Switch)
+  - platform: gpio
+    name: "${friendly_name}"
+    icon: "mdi:${main_icon}"
+    pin: GPIO14
+    id: relay
+    restore_mode: "${default_state}"
+    on_turn_on:
+      - light.turn_on:
+          id: led
+          brightness: 100%
+          transition_length: 0s
+    on_turn_off:
+      - light.turn_off:
+          id: led
+          transition_length: 0s
+
+sensor:
+  # WiFi Signal Sensor
+  - platform: wifi_signal
+    name: "${friendly_name} WiFi Status"
+    update_interval: 60s
+  # Power Monitoring
+  - platform: hlw8012
+    sel_pin:
+      number: GPIO12
+      inverted: true
+    cf_pin: GPIO4
+    cf1_pin: GPIO05
+    change_mode_every: 3
+    update_interval: 3s
+    voltage:
+      name: "${friendly_name} Voltage"
+      id: voltage
+      unit_of_measurement: V
+      accuracy_decimals: 1
+      filters:
+        - calibrate_linear:
+          - 0.0 -> 0.0
+          - $v_raw -> $v_actual
+    power:
+      name: "${friendly_name} Power"
+      id: power
+      unit_of_measurement: W
+      accuracy_decimals: 0
+      filters:
+        - calibrate_linear:
+          - 0.0 -> 0.0
+          - $p_raw -> $p_actual
+    current:
+      name: "${friendly_name} Current"
+      id: current
+      unit_of_measurement: A
+      accuracy_decimals: 3
+      filters:
+        - calibrate_linear:
+          - 0.0 -> 0.0
+          - $c_raw -> $c_actual
+          
+  # Total daily energy sensor
+  - platform: total_daily_energy
+    name: "${friendly_name} Daily Energy"
+    power_id: power
+    filters:
+      # Multiplication factor from W to kW is 0.001
+      - multiply: 0.001
+    unit_of_measurement: kWh
+
+text_sensor:
+  # Device Activity State
+  # e.g. shows as active if power reading above a certain threshold
+  - platform: template
+    name: "${friendly_name} Activity State"
+    icon: "mdi:${main_icon}"
+    lambda: |-
+      if (id(power).state >= $activity_threshold) {
+        return {"Active"};
+      } else {
+        return {"Idle"};
+      }
+    update_interval: 5s
+
+# Relay State LED
+output:
+  - platform: esp8266_pwm
+    id: state_led
+    pin:
+      number: GPIO13
+      inverted: true
+
+light:
+  - platform: monochromatic
+    output: state_led
+    id: led
+
+status_led:
+  pin:
+    number: GPIO1
+    inverted: True
