@@ -2,7 +2,7 @@
 substitutions:
   # Device Names
   name: "localbytes-plug-pm-v2"
-  friendly_name: "Localbytes Smart Plug V2"
+  friendly_name: "Localbytes Plug V2"
 
   # Icon
   main_icon: "power-socket-uk"
@@ -59,7 +59,7 @@ dashboard_import:
 wifi:
   output_power: 12
   ap:
-    ssid: "${name} Fallback Hotspot"
+    ssid: "${friendly_name} Fallback"
 
 captive_portal:
 
