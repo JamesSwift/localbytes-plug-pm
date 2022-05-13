@@ -242,8 +242,3 @@ light:
   - platform: monochromatic
     output: state_led
     id: led
-
-status_led:
-  pin:
-    number: GPIO1
-    inverted: True
