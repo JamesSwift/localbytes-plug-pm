@@ -26,7 +26,7 @@ esphome:
   # configuration and updates.
   project:
     name: localbytes.plug-pm-v2
-    version: "1.1.1"
+    version: "1.1.2"
 
 esp8266:
   board: esp01_1m
@@ -175,21 +175,21 @@ sensor:
 
   # Make calibration data readable
   - platform: template
-    name: "Voltage Calibration"
+    name: "${friendly_name} Voltage Calibration"
     entity_category: diagnostic
     accuracy_decimals: 3
     lambda: |-
       return id(voltage_multiply);
       
   - platform: template
-    name: "Power Calibration"
+    name: "${friendly_name} Power Calibration"
     entity_category: diagnostic
     accuracy_decimals: 3
     lambda: |-
       return id(power_multiply);
       
   - platform: template
-    name: "Current Calibration"
+    name: "${friendly_name} Current Calibration"
     entity_category: diagnostic
     accuracy_decimals: 3
     lambda: |-
