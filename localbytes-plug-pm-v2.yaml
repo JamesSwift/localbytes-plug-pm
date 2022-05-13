@@ -12,9 +12,6 @@ substitutions:
   # Options: `RESTORE_DEFAULT_OFF`, `RESTORE_DEFAULT_ON`, `ALWAYS_ON` & `ALWAYS_OFF`
   default_state: "RESTORE_DEFAULT_OFF"
 
-  # Activity State Threshold
-  # Threshold (number) that the device will change from `Idle` to `Active` if power is greater than or equal to
-  activity_threshold: "5"
 
 esphome:
   name: "${name}"
@@ -26,7 +23,7 @@ esphome:
   # configuration and updates.
   project:
     name: localbytes.plug-pm-v2
-    version: "1.1.3"
+    version: "1.2.0"
 
 esp8266:
   board: esp01_1m
@@ -59,22 +56,31 @@ api:
       variables:
         actual_value: float
       then:
-        lambda: |-
-          id(voltage_multiply) = actual_value / id(voltage).raw_state;
+        - lambda: |-
+            id(voltage_multiply) = actual_value / id(voltage).raw_state;
+        - number.set:
+            id: voltage_factor
+            value: !lambda "return id(voltage_multiply);"
           
     - service: calibrate_power
       variables:
         actual_value: float
       then:
-        lambda: |-
-          id(power_multiply) = actual_value / id(power).raw_state;
+        - lambda: |-
+            id(power_multiply) = actual_value / id(power).raw_state;
+        - number.set:
+            id: power_factor
+            value: !lambda "return id(power_multiply);"
           
     - service: calibrate_current
       variables:
         actual_value: float
       then:
-        lambda: |-
-          id(current_multiply) = actual_value / id(current).raw_state;
+        - lambda: |-
+            id(current_multiply) = actual_value / id(current).raw_state;
+        - number.set:
+            id: current_factor
+            value: !lambda "return id(current_multiply);"
 
 globals:
   - id: voltage_multiply
@@ -173,41 +179,56 @@ sensor:
       - multiply: 0.001
     unit_of_measurement: kWh
 
-  # Make calibration data readable
+    
+
+# Make calibration factor data readable/setable from home assistant
+number:
   - platform: template
-    name: "${friendly_name} Voltage Calibration"
+    name: "${friendly_name} Voltage Calibration Factor"
+    id: voltage_factor
+    icon: "mdi:sine-wave"
+    min_value: 0
+    max_value: 10
+    step: 0.001
     entity_category: diagnostic
-    accuracy_decimals: 3
+    mode: box
     lambda: |-
       return id(voltage_multiply);
-      
+    set_action:
+      lambda: |-
+        id(voltage_multiply) = x;
+
   - platform: template
-    name: "${friendly_name} Power Calibration"
+    name: "${friendly_name} Power Calibration Factor"
+    id: power_factor
+    icon: "mdi:flash"
+    min_value: 0
+    max_value: 10
+    step: 0.001
     entity_category: diagnostic
-    accuracy_decimals: 3
+    mode: box
     lambda: |-
       return id(power_multiply);
-      
+    set_action:
+      lambda: |-
+        id(power_multiply) = x;
+        
   - platform: template
-    name: "${friendly_name} Current Calibration"
+    name: "${friendly_name} Current Calibration Factor"
+    id: current_factor
+    icon: "mdi:current-ac"
+    min_value: 0
+    max_value: 10
+    step: 0.001
     entity_category: diagnostic
-    accuracy_decimals: 3
+    mode: box
     lambda: |-
       return id(current_multiply);
+    set_action:
+      lambda: |-
+        id(current_multiply) = x;
 
-text_sensor:
-  # Device Activity State
-  # e.g. shows as active if power reading above a certain threshold
-  - platform: template
-    name: "${friendly_name} Activity State"
-    icon: "mdi:${main_icon}"
-    lambda: |-
-      if (id(power).state >= $activity_threshold) {
-        return {"Active"};
-      } else {
-        return {"Idle"};
-      }
-    update_interval: 5s
+
 
 # Relay State LED
 output:
