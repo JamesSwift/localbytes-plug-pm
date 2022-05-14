@@ -23,7 +23,7 @@ esphome:
   # configuration and updates.
   project:
     name: localbytes.plug-pm
-    version: "1.3.0"
+    version: "1.4.0"
 
 esp8266:
   board: esp01_1m
@@ -39,6 +39,7 @@ dashboard_import:
 
 wifi:
   output_power: 14db
+  power_save_mode: light
   ap:
     ssid: "${friendly_name}"
 
@@ -106,8 +107,16 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     name: "${friendly_name} Button"
-    on_press:
-      - switch.toggle: relay
+    on_click:
+
+      - max_length: 1s
+        then:
+          switch.toggle: relay
+      
+      - min_length: 1.5s
+        max_length: 5s
+        then:
+          switch.toggle: disable_led
       
   - platform: status
     name: "${friendly_name} Server Status"
@@ -121,14 +130,57 @@ switch:
     id: relay
     restore_mode: "${default_state}"
     on_turn_on:
-      - light.turn_on:
-          id: led
-          brightness: 100%
-          transition_length: 0s
+      if:
+        condition:
+          switch.is_off: disable_led
+        then:
+          light.turn_on:
+            id: led
     on_turn_off:
       - light.turn_off:
           id: led
-          transition_length: 0s
+  
+  - platform: template
+    name: "${friendly_name} Disable LED"
+    id: disable_led
+    icon: "mdi:led-variant-off"
+    restore_state: true
+    optimistic: true
+    on_turn_on:
+      #Flash twice
+      - light.turn_off: led
+      - delay: 0.1s
+      - light.turn_on: led
+      - delay: 0.1s
+      - light.turn_off: led
+      - delay: 0.1s
+      - light.turn_on: led
+      - delay: 0.1s
+      #Final state
+      - light.turn_off: led
+    on_turn_off:
+      #Flash twice
+      - light.turn_on: led
+      - delay: 0.1s
+      - light.turn_off: led
+      - delay: 0.1s
+      - light.turn_on: led
+      - delay: 0.1s
+      - light.turn_off: led
+      - delay: 0.7s
+      #Final state
+      - if:
+          condition:
+            switch.is_on: relay
+          then:
+            light.turn_on: led
+
+  #Try to solve overheating issue
+  - platform: gpio
+    pin: GPIO15
+    restore_mode: ALWAYS_OFF
+    id: pin15
+
 
 sensor:
   # WiFi Signal Sensor
@@ -142,7 +194,7 @@ sensor:
       number: GPIO12
       inverted: true
     cf_pin: GPIO4
-    cf1_pin: GPIO05
+    cf1_pin: GPIO5
     change_mode_every: 3
     update_interval: 6s
     
@@ -239,6 +291,6 @@ output:
       inverted: true
 
 light:
-  - platform: monochromatic
+  - platform: binary
     output: state_led
     id: led
