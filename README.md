@@ -4,7 +4,7 @@ This is an ESPHome firmware for the Localbytes smart plug, which is sold pre-loa
 
 # Installation
 
-To flash the ESPHome firmware over tasmota, first flash the <a hrf="https://github.com/JamesSwift/localbytes-plug-pm/releases/latest/download/minimal.bin">minimal</a> firmware using the tasmota web interface (as the full firmware is too big to fit in the free space left by tasmota). Then, connect to the hotspot and enter your wifi details. 
+To flash the ESPHome firmware over tasmota, first flash the <a href="https://github.com/JamesSwift/localbytes-plug-pm/releases/latest/download/minimal.bin">minimal</a> firmware using the tasmota web interface (as the full firmware is too big to fit in the free space left by tasmota). Then, connect to the hotspot and enter your wifi details. 
 
 At this point you can use the "dashboard import" feature of esphome to take ownership of the device. The next time you hit install/update via the dashboard, the full firmware will be uploaded to the plug. 
 
