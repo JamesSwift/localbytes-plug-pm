@@ -2,6 +2,24 @@
 
 This is an ESPHome firmware for the Localbytes smart plug, which is sold pre-loaded with tasmota. This firmware supports the original 10A plug and the upgraded 13A plug. <a href="https://www.mylocalbytes.com/products/smart-plug-pm?variant=41600621510847">You can buy these smart plugs here</a>.
 
+# Features
+
+- Turn the switch on and off via home assistant or web interface
+- Disabled the LED by pressing and holding the button for 3 seconds (or toggle the switch in home assistant/web interface)
+- Power monitoring via home assistant or web interface
+- Calibrate the power monitoring using a GUI via home assistant
+- See and alter the calibration data via home assistant
+- ESPHome dashboard import
+
+<img src="https://user-images.githubusercontent.com/2080205/168430415-de87195f-6d37-4fdc-91ca-93a1615c5d34.png" width="45%" /> 
+<img src="https://user-images.githubusercontent.com/2080205/168430744-598f9d21-c1ce-4fce-9076-8fca26c62be8.png" width="45%" />
+<img src="https://user-images.githubusercontent.com/2080205/168430637-ae9f14c6-57a8-4f3f-8a85-1f35966b43bd.png" width="45%" />
+
+
+
+
+
+
 # Installation
 
 To flash the ESPHome firmware over tasmota, first flash the <a href="https://github.com/JamesSwift/localbytes-plug-pm/releases/latest/download/minimal.bin">minimal</a> firmware using the tasmota web interface (as the full firmware is too big to fit in the free space left by tasmota). Then, connect to the hotspot and enter your wifi details. 
