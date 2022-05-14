@@ -8,7 +8,7 @@ To flash the ESPHome firmware over tasmota, first flash the <a href="https://git
 
 At this point you can use the "dashboard import" feature of esphome to take ownership of the device. The next time you hit install/update via the dashboard, the full firmware will be uploaded to the plug. 
 
-Alternatively, if you don't want to import the plug to your ESPHome dashboard, connect to the hotpsot the device creates and use the web UI to flash the <a href="https://github.com/JamesSwift/localbytes-plug-pm/releases/latest/download/loalbytes-plug-pm.bin">full firmware</a> from the latest release.
+Alternatively, if you don't want to import the plug to your ESPHome dashboard, connect to the hotpsot the device creates and use the web UI to flash the <a href="https://github.com/JamesSwift/localbytes-plug-pm/releases/latest/download/localbytes-plug-pm.bin">full firmware</a> from the latest release.
 
 # Calibration
 
