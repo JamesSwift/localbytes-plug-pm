@@ -1,8 +1,8 @@
 # These substitutions allow the end user to override certain values
 substitutions:
   # Device Names
-  name: "localbytes-plug-v2"
-  friendly_name: "Localbytes Plug V2"
+  name: "localbytes-plug-pm"
+  friendly_name: "Localbytes Plug PM"
   
   # Icon
   main_icon: "power-socket-uk"
@@ -22,8 +22,8 @@ esphome:
   # This will allow for (future) project identification,
   # configuration and updates.
   project:
-    name: localbytes.plug-pm-v2
-    version: "1.2.0"
+    name: localbytes.plug-pm
+    version: "1.3.0"
 
 esp8266:
   board: esp01_1m
@@ -35,7 +35,7 @@ ota:
 
 # This should point to the public location of this yaml file.
 dashboard_import:
-  package_import_url: github://JamesSwift/localbytes-plug-pm-v2/localbytes-plug-pm-v2.yaml@main
+  package_import_url: github://JamesSwift/localbytes-plug-pm/localbytes-plug-pm.yaml@main
 
 wifi:
   output_power: 14db

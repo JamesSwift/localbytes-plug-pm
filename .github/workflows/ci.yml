@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         file:
-          - localbytes-plug-pm-v2.yaml
+          - localbytes-plug-pm.yaml
           - minimal.yaml
     steps:
       - name: Checkout source code

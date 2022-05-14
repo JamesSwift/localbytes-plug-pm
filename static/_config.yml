@@ -1,4 +1,4 @@
 # CHANGEME: Set these variable to your liking
-title: Local Bytes Power Monitor Smart Plug V2
-description: ESPHome firmware for localbytes power monitoring smart plug (v2)
+title: Local Bytes Power Monitor Smart Plug
+description: ESPHome firmware for localbytes power monitoring smart plug
 theme: jekyll-theme-slate
