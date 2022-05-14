@@ -23,7 +23,7 @@ esphome:
   # configuration and updates.
   project:
     name: localbytes.plug-pm
-    version: "1.4.0"
+    version: "1.4.1"
 
 esp8266:
   board: esp01_1m
@@ -174,12 +174,6 @@ switch:
             switch.is_on: relay
           then:
             light.turn_on: led
-
-  #Try to solve overheating issue
-  - platform: gpio
-    pin: GPIO15
-    restore_mode: ALWAYS_OFF
-    id: pin15
 
 
 sensor:
