@@ -38,7 +38,7 @@ dashboard_import:
   package_import_url: github://JamesSwift/localbytes-plug-pm/localbytes-plug-pm.yaml@main
 
 wifi:
-  output_power: 14db
+  output_power: 18db
   power_save_mode: light
   ap:
     ssid: "${friendly_name}"
