@@ -23,7 +23,7 @@ esphome:
   # configuration and updates.
   project:
     name: localbytes.plug-pm
-    version: "1.4.2"
+    version: "1.5.0"
 
 esp8266:
   board: esp01_1m
@@ -111,13 +111,22 @@ binary_sensor:
 
       - max_length: 1s
         then:
-          switch.toggle: relay
+          if:
+            condition:
+              switch.is_off: disable_button
+            then:
+              switch.toggle: relay
       
       - min_length: 1.5s
         max_length: 5s
         then:
           switch.toggle: disable_led
       
+      - min_length: 8s
+        max_length: 12s
+        then:
+          switch.toggle: disable_button
+          
   - platform: status
     name: "${friendly_name} Server Status"
 
@@ -175,6 +184,54 @@ switch:
           then:
             light.turn_on: led
 
+
+  
+  - platform: template
+    name: "${friendly_name} Disable Button"
+    id: disable_button
+    icon: "mdi:toggle-switch-off-outline"
+    restore_state: true
+    optimistic: true
+    on_turn_on:
+      #Flash thrice
+      - light.turn_off: led
+      - delay: 0.15s
+      - light.turn_on: led
+      - delay: 0.15s
+      - light.turn_off: led
+      - delay: 0.15s
+      - light.turn_on: led
+      - delay: 0.15s
+      - light.turn_off: led
+      - delay: 0.15s
+      - light.turn_on: led
+      - delay: 0.15s
+        #Final state
+      - if:
+          condition:
+            switch.is_off: relay
+          then:
+            light.turn_off: led
+    on_turn_off:
+      #Flash thrice
+      - light.turn_on: led
+      - delay: 0.15s
+      - light.turn_off: led
+      - delay: 0.15s
+      - light.turn_on: led
+      - delay: 0.15s
+      - light.turn_off: led
+      - delay: 0.15s
+      - light.turn_on: led
+      - delay: 0.15s
+      - light.turn_off: led
+      - delay: 0.7s
+      #Final state
+      - if:
+          condition:
+            switch.is_on: relay
+          then:
+            light.turn_on: led
 
 sensor:
   # WiFi Signal Sensor
