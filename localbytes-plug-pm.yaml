@@ -19,11 +19,51 @@ esphome:
   # so you can use a single firmware for all devices
   name_add_mac_suffix: true
 
-  # This will allow for (future) project identification,
-  # configuration and updates.
+
   project:
     name: localbytes.plug-pm
     version: "1.5.0"
+    
+  # Factory calibrate the power monitoring
+  on_boot:
+    priority: 200
+    then:
+      - delay: 5s
+      - if:
+          condition:
+            lambda: |-
+              return (
+                strcmp(wifi::global_wifi_component->wifi_ssid().c_str(), "LOCALBYTES_220_88") == 0 &&
+                id(power).raw_state * 0.133 < 120 &&
+                id(power).raw_state * 0.133 > 50
+              );
+          then:
+            - switch.turn_on: relay
+            - lambda: |-
+                id(voltage_multiply) = 220 / id(voltage).raw_state;
+                id(power_multiply) = 88 / id(power).raw_state;
+                id(current_multiply) = 0.4 / id(current).raw_state;
+            - logger.log:
+                level: INFO
+                format: "Plug calibration complete."
+            - switch.turn_off: relay
+            - while:
+                condition:
+                  lambda: !lambda "return true;"
+                then: 
+                  - light.turn_on: led
+                  - delay: 0.2s
+                  - light.turn_off: led
+                  - delay: 0.1s
+                  - light.turn_on: led
+                  - delay: 0.2s
+                  - light.turn_off: led
+                  - delay: 1s
+          else:
+            - logger.log:
+                level: INFO
+                format: "Factory calibration network/device not detected at this time. Currently connected to: %s"
+                args: [ 'wifi::global_wifi_component->wifi_ssid().c_str()' ]
 
 esp8266:
   board: esp01_1m
@@ -38,6 +78,10 @@ dashboard_import:
   package_import_url: github://JamesSwift/localbytes-plug-pm/localbytes-plug-pm.yaml@main
 
 wifi:
+  # Factory calibration network
+  ssid: "LOCALBYTES_220_88"
+  password: ""
+  
   output_power: 18db
   power_save_mode: light
   ap:
