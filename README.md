@@ -5,17 +5,16 @@ This is an ESPHome firmware for the Localbytes smart plug, which is sold pre-loa
 # Features
 
 - Turn the switch on and off via home assistant or web interface
-- Disabled the LED by pressing and holding the button for 3 seconds (or toggle the switch in home assistant/web interface)
+- Disabled the LED by pressing and holding the button for 3 seconds (or toggle the option in home assistant/web interface)
+- Disable the physical button (i.e. child lock) by pressing and holding the button for 10 seconds (or toggle the option in home assistant/web interface)
 - Power monitoring via home assistant or web interface
 - Calibrate the power monitoring using a GUI via home assistant
 - See and alter the calibration data via home assistant
 - ESPHome dashboard import
 
-<img src="https://user-images.githubusercontent.com/2080205/168430415-de87195f-6d37-4fdc-91ca-93a1615c5d34.png" width="45%" /> 
+<img src="https://user-images.githubusercontent.com/2080205/169600703-0ddfab3f-5309-4dd7-bd22-87a6d4d0ecb1.png" width="45%" /> 
 <img src="https://user-images.githubusercontent.com/2080205/168430744-598f9d21-c1ce-4fce-9076-8fca26c62be8.png" width="45%" />
 <img src="https://user-images.githubusercontent.com/2080205/168430637-ae9f14c6-57a8-4f3f-8a85-1f35966b43bd.png" width="45%" />
-
-
 
 
 
