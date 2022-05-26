@@ -33,8 +33,7 @@ esphome:
           condition: 
             #Are we connected to the network
             lambda: |-
-              //return strcmp(wifi::global_wifi_component->wifi_ssid().c_str(), "LOCALBYTES_220_88") == 0;
-              return strcmp(wifi::global_wifi_component->wifi_ssid().c_str(), "PLUSNET-WJKP") == 0;
+              return strcmp(wifi::global_wifi_component->wifi_ssid().c_str(), "LOCALBYTES_220_88") == 0;
           then:
             - switch.turn_on: relay
             - delay: 5s
