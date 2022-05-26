@@ -2,6 +2,8 @@
 
 This is an ESPHome firmware for the Localbytes smart plug, which is sold pre-loaded with tasmota. This firmware supports the original 10A plug and the upgraded 13A plug. <a href="https://www.mylocalbytes.com/products/smart-plug-pm?variant=41600621510847">You can buy these smart plugs here</a>.
 
+This branch contains the code which allows the plugs to be auto factory calibrated when they detect a specific SSID, with the specified load attached.
+
 # Features
 
 - Turn the switch on and off via home assistant or web interface
