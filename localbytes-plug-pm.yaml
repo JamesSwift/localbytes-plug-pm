@@ -50,6 +50,7 @@ web_server:
 
 time:
   - platform: homeassistant
+    timezone: Europe/London
 
 api:
   services:
