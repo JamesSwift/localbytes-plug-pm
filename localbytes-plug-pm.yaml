@@ -12,9 +12,10 @@ substitutions:
   # Options: `RESTORE_DEFAULT_OFF`, `RESTORE_DEFAULT_ON`, `ALWAYS_ON` & `ALWAYS_OFF`
   default_state: "RESTORE_DEFAULT_OFF"
 
-
 esphome:
   name: "${name}"
+  friendly_name: "${friendly_name}"
+
   # Automatically add the mac address to the name
   # so you can use a single firmware for all devices
   name_add_mac_suffix: true
@@ -23,7 +24,7 @@ esphome:
   # configuration and updates.
   project:
     name: localbytes.plug-pm
-    version: "1.5.0"
+    version: "1.6.0"
 
 esp8266:
   board: esp01_1m
@@ -107,7 +108,7 @@ binary_sensor:
       number: GPIO3
       mode: INPUT_PULLUP
       inverted: true
-    name: "${friendly_name} Button"
+    name: "Button"
     on_click:
 
       - max_length: 1s
@@ -129,7 +130,7 @@ binary_sensor:
           switch.toggle: disable_button
           
   - platform: status
-    name: "${friendly_name} Server Status"
+    name: "Server Status"
 
 switch:
   # Relay (As Switch)
@@ -151,7 +152,7 @@ switch:
           id: led
   
   - platform: template
-    name: "${friendly_name} Disable LED"
+    name: "Disable LED"
     id: disable_led
     icon: "mdi:led-variant-off"
     restore_state: true
@@ -188,7 +189,7 @@ switch:
 
   
   - platform: template
-    name: "${friendly_name} Disable Button"
+    name: "Disable Button"
     id: disable_button
     icon: "mdi:toggle-switch-off-outline"
     restore_state: true
@@ -237,7 +238,7 @@ switch:
 sensor:
   # WiFi Signal Sensor
   - platform: wifi_signal
-    name: "${friendly_name} WiFi Status"
+    name: "WiFi Status"
     update_interval: 60s
     
   # Power Monitoring
@@ -251,7 +252,7 @@ sensor:
     update_interval: 6s
     
     voltage:
-      name: "${friendly_name} Voltage"
+      name: "Voltage"
       id: voltage
       unit_of_measurement: V
       accuracy_decimals: 1
@@ -259,7 +260,7 @@ sensor:
         - lambda: return x * id(voltage_multiply);
         
     power:
-      name: "${friendly_name} Power"
+      name: "Power"
       id: power
       unit_of_measurement: W
       accuracy_decimals: 0
@@ -267,7 +268,7 @@ sensor:
         - lambda: return x * id(power_multiply);
         
     current:
-      name: "${friendly_name} Current"
+      name: "Current"
       id: current
       unit_of_measurement: A
       accuracy_decimals: 3
@@ -276,7 +277,7 @@ sensor:
           
   # Total daily energy sensor
   - platform: total_daily_energy
-    name: "${friendly_name} Daily Energy"
+    name: "Daily Energy"
     power_id: power
     filters:
       # Multiplication factor from W to kW is 0.001
@@ -288,7 +289,7 @@ sensor:
 # Make calibration factor data readable/setable from home assistant
 number:
   - platform: template
-    name: "${friendly_name} Voltage Calibration Factor"
+    name: "Voltage Calibration Factor"
     id: voltage_factor
     icon: "mdi:sine-wave"
     min_value: 0
@@ -303,7 +304,7 @@ number:
         id(voltage_multiply) = x;
 
   - platform: template
-    name: "${friendly_name} Power Calibration Factor"
+    name: "Power Calibration Factor"
     id: power_factor
     icon: "mdi:flash"
     min_value: 0
@@ -318,7 +319,7 @@ number:
         id(power_multiply) = x;
         
   - platform: template
-    name: "${friendly_name} Current Calibration Factor"
+    name: "Current Calibration Factor"
     id: current_factor
     icon: "mdi:current-ac"
     min_value: 0
