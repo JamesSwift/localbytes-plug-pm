@@ -24,7 +24,7 @@ esphome:
   # configuration and updates.
   project:
     name: localbytes.plug-pm
-    version: "1.6.0"
+    version: "1.6.1"
 
 esp8266:
   board: esp01_1m
@@ -135,7 +135,7 @@ binary_sensor:
 switch:
   # Relay (As Switch)
   - platform: gpio
-    name: "${friendly_name}"
+    name: ""
     icon: "mdi:${main_icon}"
     pin: GPIO14
     id: relay
