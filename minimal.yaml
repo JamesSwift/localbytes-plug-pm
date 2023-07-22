@@ -6,6 +6,8 @@ substitutions:
 
 esphome:
   name: "${name}"
+  friendly_name: "${friendly_name}"
+
   # Automatically add the mac address to the name
   # so you can use a single firmware for all devices
   name_add_mac_suffix: true
@@ -14,7 +16,7 @@ esphome:
   # configuration and updates.
   project:
     name: localbytes.plug-pm
-    version: "1.3.0"
+    version: "1.6.0"
 
 esp8266:
   board: esp01_1m
