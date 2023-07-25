@@ -13,7 +13,8 @@ substitutions:
   default_state: "RESTORE_DEFAULT_OFF"
 
   # We set the timout to 10s for a better UX when you get your new plug
-
+  # This is done at compilation time by adding `-s ap_timout 5s`, but the default should really be 1m (as it is in esphome)
+  ap_timeout: "1m"
 
 esphome:
   name: "${name}"
@@ -87,7 +88,7 @@ wifi:
   output_power: 18db
   power_save_mode: light
   ap:
-    ap_timeout: 10s
+    ap_timeout: "${ap_timeout}"
     ssid: "${friendly_name}"
 
 captive_portal:
