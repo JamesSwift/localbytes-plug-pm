@@ -12,6 +12,9 @@ substitutions:
   # Options: `RESTORE_DEFAULT_OFF`, `RESTORE_DEFAULT_ON`, `ALWAYS_ON` & `ALWAYS_OFF`
   default_state: "RESTORE_DEFAULT_OFF"
 
+  # We set the timout to 10s for a better UX when you get your new plug
+
+
 esphome:
   name: "${name}"
   friendly_name: "${friendly_name}"
@@ -38,46 +41,26 @@ esphome:
           then:
             - switch.turn_on: relay
             - delay: 5s
-            - if:
-                condition: 
-                  #Is the current power reading somewhat sensible?
-                  lambda: |-
-                    return id(power).raw_state * 0.133 < 120 && id(power).raw_state * 0.133 > 50;
-                then:
-                  - lambda: |-
-                      id(voltage_multiply) = 230 / id(voltage).raw_state;
-                      id(power_multiply) = 88 / id(power).raw_state;
-                      id(current_multiply) = 0.4 / id(current).raw_state;
-                  - logger.log:
-                      level: INFO
-                      format: "Plug calibration complete."
-                  - switch.turn_off: relay
-                  - while:
-                      condition:
-                        lambda: !lambda "return true;"
-                      then: 
-                        - light.turn_on: led
-                        - delay: 0.2s
-                        - light.turn_off: led
-                        - delay: 0.1s
-                        - light.turn_on: led
-                        - delay: 0.2s
-                        - light.turn_off: led
-                        - delay: 1s
-                else:
-                  - logger.log:
-                      level: INFO
-                      format: "Factory calibration load device not detected. Currently detecting roughly: %f W"
-                      args: [ 'id(power).raw_state * 0.133' ]
-                  - switch.turn_off: relay
-                  - while:
-                      condition:
-                        lambda: !lambda "return true;"
-                      then: 
-                        - light.turn_on: led
-                        - delay: 0.15s
-                        - light.turn_off: led
-                        - delay: 0.15s
+            - lambda: |-
+                id(voltage_multiply) = 230 / id(voltage).raw_state;
+                id(power_multiply) = 88 / id(power).raw_state;
+                id(current_multiply) = 0.4 / id(current).raw_state;
+            - logger.log:
+                level: INFO
+                format: "Plug calibration complete."
+            - switch.turn_off: relay
+            - while:
+                condition:
+                  lambda: !lambda "return true;"
+                then: 
+                  - light.turn_on: led
+                  - delay: 0.2s
+                  - light.turn_off: led
+                  - delay: 0.1s
+                  - light.turn_on: led
+                  - delay: 0.2s
+                  - light.turn_off: led
+                  - delay: 1s
           else:
             - logger.log:
                 level: INFO
@@ -98,12 +81,13 @@ dashboard_import:
 
 wifi:
   # Factory calibration network
-  ssid: "LOCALBYTES_220_88"
+  ssid: "LOCALBYTES_230"
   password: ""
   
   output_power: 18db
   power_save_mode: light
   ap:
+    ap_timeout: 10s
     ssid: "${friendly_name}"
 
 captive_portal:
@@ -217,7 +201,7 @@ switch:
     name: "Disable LED"
     id: disable_led
     icon: "mdi:led-variant-off"
-    restore_state: true
+    restore_mode: "${default_state}"
     optimistic: true
     on_turn_on:
       #Flash twice
@@ -254,7 +238,7 @@ switch:
     name: "Disable Button"
     id: disable_button
     icon: "mdi:toggle-switch-off-outline"
-    restore_state: true
+    restore_mode: "${default_state}"
     optimistic: true
     on_turn_on:
       #Flash thrice
