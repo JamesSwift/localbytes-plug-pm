@@ -14,7 +14,7 @@ substitutions:
 
   # We set the timout to 10s for a better UX when you get your new plug
   # This is done at compilation time by adding `-s ap_timout 5s`, but the default should really be 1m (as it is in esphome)
-  ap_timeout: "1m"
+  ap_timeout: "60s"
 
 esphome:
   name: "${name}"
@@ -33,7 +33,6 @@ esphome:
   on_boot:
     priority: 200
     then:
-      - delay: 2s
       - if:
           condition: 
             #Are we connected to the network
@@ -85,6 +84,8 @@ wifi:
   ssid: "LOCALBYTES_230"
   password: ""
   
+  fast_connect: yes
+
   output_power: 18db
   power_save_mode: light
   ap:
