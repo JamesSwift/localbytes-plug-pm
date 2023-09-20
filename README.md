@@ -2,6 +2,11 @@
 
 This is an ESPHome firmware for the Localbytes smart plug, which is sold pre-loaded with tasmota. This firmware supports the original 10A plug and the upgraded 13A plug. <a href="https://www.mylocalbytes.com/products/smart-plug-pm?variant=41600621510847">You can buy these smart plugs here</a>.
 
+## Original Credit
+
+Massive thanks to @JamesSwift who made the original here - JamesSwift/localbytes-plug-pm  
+Without whom, esphome would still be an unsupported platform
+
 # Features
 
 - Turn the switch on and off via home assistant or web interface
@@ -21,15 +26,15 @@ This is an ESPHome firmware for the Localbytes smart plug, which is sold pre-loa
 
 # Installation
 
-To flash the ESPHome firmware over tasmota, first flash the <a href="https://github.com/JamesSwift/localbytes-plug-pm/releases/latest/download/minimal.bin">ESPHome minimal</a> firmware using the tasmota web interface (as the full firmware is too big to fit in the free space left by tasmota). Then connect to the wifi hotspot that is created and enter your network's wifi details. 
+To flash the ESPHome firmware over tasmota, first flash the <a href="https://github.com/LocalBytes/esphome-localbytes-plug/releases/latest/download/minimal.bin">ESPHome minimal</a> firmware using the tasmota web interface (as the full firmware is too big to fit in the free space left by tasmota). Then connect to the wifi hotspot that is created and enter your network's wifi details. 
 
 At this point you can use the "dashboard import" feature of esphome to take ownership of the device. The next time you hit install/update via the dashboard, the full firmware will be uploaded to the plug. 
 
-Alternatively, if you don't want to import the plug to your ESPHome dashboard, connect to the hotpsot the device creates and use the web UI to flash the <a href="https://github.com/JamesSwift/localbytes-plug-pm/releases/latest/download/localbytes-plug-pm.bin">full firmware</a> from the latest release.
+Alternatively, if you don't want to import the plug to your ESPHome dashboard, connect to the hotpsot the device creates and use the web UI to flash the <a href="https://github.com/LocalBytes/esphome-localbytes-plug/releases/latest/download/localbytes-plug-pm.bin">full firmware</a> from the latest release.
 
 # Firmware File Too Big
 
-A minimal firmware is provided as an intermiediary step, as there isn't enough space on the factory smart plugs to store the new full firmware while it is being flashed. Some users have reported that even this minimal firmware is still too large. If this is the case, you can try flashing the <a href="http://ota.tasmota.com/tasmota/release/tasmota-minimal.bin.gz">Tasmota minimal</a> firmware instead. Then flash the <a href="https://github.com/JamesSwift/localbytes-plug-pm/releases/latest/download/localbytes-plug-pm.bin">full firmware</a> afterwards. 
+A minimal firmware is provided as an intermiediary step, as there isn't enough space on the factory smart plugs to store the new full firmware while it is being flashed. Some users have reported that even this minimal firmware is still too large. If this is the case, you can try flashing the <a href="http://ota.tasmota.com/tasmota/release/tasmota-minimal.bin.gz">Tasmota minimal</a> firmware instead. Then flash the <a href="https://github.com/LocalBytes/esphome-localbytes-plug/releases/latest/download/localbytes-plug-pm.bin">full firmware</a> afterwards. 
 
 # Calibration
 

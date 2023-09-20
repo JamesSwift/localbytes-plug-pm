@@ -12,6 +12,10 @@ substitutions:
   # Options: `RESTORE_DEFAULT_OFF`, `RESTORE_DEFAULT_ON`, `ALWAYS_ON` & `ALWAYS_OFF`
   default_state: "RESTORE_DEFAULT_OFF"
 
+  # We set the timout to 10s for a better UX when you get your new plug
+  # This is done at compilation time by adding `-s ap_timout 5s`, but the default should really be 1m (as it is in esphome)
+  ap_timeout: "60s"
+
 esphome:
   name: "${name}"
   friendly_name: "${friendly_name}"
@@ -20,11 +24,48 @@ esphome:
   # so you can use a single firmware for all devices
   name_add_mac_suffix: true
 
-  # This will allow for (future) project identification,
-  # configuration and updates.
+
   project:
     name: localbytes.plug-pm
     version: "1.6.1"
+    
+  # Factory calibrate the power monitoring
+  on_boot:
+    priority: 200
+    then:
+      - if:
+          condition: 
+            #Are we connected to the network
+            lambda: |-
+              return strcmp(wifi::global_wifi_component->wifi_ssid().c_str(), "LOCALBYTES_230") == 0;
+          then:
+            - switch.turn_on: relay
+            - delay: 5s
+            - lambda: |-
+                id(voltage_multiply) = 230 / id(voltage).raw_state;
+                id(power_multiply) = 88 / id(power).raw_state;
+                id(current_multiply) = 0.4 / id(current).raw_state;
+            - logger.log:
+                level: INFO
+                format: "Plug calibration complete."
+            - switch.turn_off: relay
+            - while:
+                condition:
+                  lambda: !lambda "return true;"
+                then: 
+                  - light.turn_on: led
+                  - delay: 0.2s
+                  - light.turn_off: led
+                  - delay: 0.1s
+                  - light.turn_on: led
+                  - delay: 0.2s
+                  - light.turn_off: led
+                  - delay: 1s
+          else:
+            - logger.log:
+                level: INFO
+                format: "Factory calibration network not detected at this time. Currently connected to: %s"
+                args: [ 'wifi::global_wifi_component->wifi_ssid().c_str()' ]
 
 esp8266:
   board: esp01_1m
@@ -36,12 +77,19 @@ ota:
 
 # This should point to the public location of this yaml file.
 dashboard_import:
-  package_import_url: github://JamesSwift/localbytes-plug-pm/localbytes-plug-pm.yaml@main
+  package_import_url: github://LocalBytes/esphome-localbytes-plug/localbytes-plug-pm.yaml@main
 
 wifi:
+  # Factory calibration network
+  ssid: "LOCALBYTES_230"
+  password: ""
+  
+  fast_connect: yes
+
   output_power: 18db
   power_save_mode: light
   ap:
+    ap_timeout: "${ap_timeout}"
     ssid: "${friendly_name}"
 
 captive_portal:
@@ -155,7 +203,7 @@ switch:
     name: "Disable LED"
     id: disable_led
     icon: "mdi:led-variant-off"
-    restore_state: true
+    restore_mode: "${default_state}"
     optimistic: true
     on_turn_on:
       #Flash twice
@@ -192,7 +240,7 @@ switch:
     name: "Disable Button"
     id: disable_button
     icon: "mdi:toggle-switch-off-outline"
-    restore_state: true
+    restore_mode: "${default_state}"
     optimistic: true
     on_turn_on:
       #Flash thrice
