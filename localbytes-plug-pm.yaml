@@ -27,7 +27,7 @@ esphome:
 
   project:
     name: localbytes.plug-pm
-    version: "1.6.1"
+    version: "1.0.0"
     
   # Factory calibrate the power monitoring
   on_boot:
