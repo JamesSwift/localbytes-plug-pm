@@ -3,6 +3,12 @@ substitutions:
   # Device Names
   name: "localbytes-plug-pm"
   friendly_name: "Localbytes Plug PM"
+  main_icon: "power-socket-uk"
+
+  # Default Relay State
+  # Aka: `restore_mode` in documentation
+  # Options: `RESTORE_DEFAULT_OFF`, `RESTORE_DEFAULT_ON`, `ALWAYS_ON` & `ALWAYS_OFF`
+  default_state: "RESTORE_DEFAULT_OFF"
 
 esphome:
   name: "${name}"
@@ -12,16 +18,15 @@ esphome:
   # so you can use a single firmware for all devices
   name_add_mac_suffix: true
 
-  # This will allow for (future) project identification,
-  # configuration and updates.
   project:
     name: localbytes.plug-pm
     version: "1.0.0"
 
 esp8266:
   board: esp01_1m
+  restore_from_flash: true
 
-api:
+logger:
 
 ota:
 
