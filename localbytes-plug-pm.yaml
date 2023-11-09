@@ -291,6 +291,7 @@ sensor:
     
   # Power Monitoring
   - platform: hlw8012
+    id: power_monitor
     sel_pin:
       number: GPIO12
       inverted: true
