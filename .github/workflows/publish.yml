@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    uses: esphome/workflows/.github/workflows/publish.yml@main
+    uses: publish-esphome.yml
     with:
       # CHANGEME: Set the filenames of your config files here:
       files: localbytes-plug-pm.yaml,minimal.yaml
