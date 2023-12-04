@@ -195,7 +195,6 @@ sensor:
 
   # Power Monitoring
   - platform: hlw8012
-    setup_priority: 249
     id: power_monitor
     sel_pin:
       number: GPIO12
