@@ -10,10 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.5.3
-
-    uses: ./.github/workflows/publish-esphome.yml
-    with:
-      # CHANGEME: Set the filenames of your config files here:
-      files: localbytes-plug-pm.yaml,minimal.yaml
-      # CHANGEME: Set the name of your project here:
-      name: Local Bytes Power Monitor Smart Plug
+      - uses: ./.github/workflows/publish-esphome.yml
+        with:
+          # CHANGEME: Set the filenames of your config files here:
+          files: localbytes-plug-pm.yaml,minimal.yaml
+          # CHANGEME: Set the name of your project here:
+          name: Local Bytes Power Monitor Smart Plug
