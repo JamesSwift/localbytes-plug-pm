@@ -58,7 +58,7 @@ jobs:
       - run: |
           mkdir output
           mv "${{ steps.esphome-build.outputs.name }}" output/
-          gzip -r output
+          find output -type f -name '*.bin' -exec gzip "{}" \;
       - uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ inputs.name }}
