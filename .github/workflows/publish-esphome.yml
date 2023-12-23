@@ -49,6 +49,7 @@ jobs:
     outputs:
       esphome-version: ${{ steps.esphome-build.outputs.esphome-version }}
     steps:
+      - uses: actions/checkout@v3.5.3
       - uses: esphome/build-action@v1.5.2
         id: esphome-build
         with:
