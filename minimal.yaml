@@ -20,7 +20,7 @@ esphome:
 
   project:
     name: localbytes.plug-pm
-    version: "1.1.0"
+    version: "1.2.0"
 
 esp8266:
   board: esp01_1m
