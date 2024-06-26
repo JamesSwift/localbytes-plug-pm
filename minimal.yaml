@@ -29,6 +29,7 @@ esp8266:
 logger:
 
 ota:
+  platform: esphome
 
 api:
 
