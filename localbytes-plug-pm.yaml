@@ -1,6 +1,14 @@
 packages:
     minimal: !include minimal.yaml
 
+esphome:
+  on_boot:
+    then:
+      - lambda: |
+          if (id(voltage_multiply) <= 0) id(voltage_multiply) = 0.3;
+          if (id(power_multiply) <= 0) id(power_multiply) = 0.133;
+          if (id(current_multiply) <= 0) id(current_multiply) = 0.85;
+
 wifi:
   power_save_mode: high
 
