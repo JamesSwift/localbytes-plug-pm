@@ -57,7 +57,9 @@ Alternatively, if you don't want to import the plug to your ESPHome dashboard, c
 
 # Firmware File Too Big
 
-A minimal firmware is provided as an intermiediary step, as there isn't enough space on the factory smart plugs to store the new full firmware while it is being flashed. Some users have reported that even this minimal firmware is still too large. If this is the case, you can try flashing the <a href="http://ota.tasmota.com/tasmota/release/tasmota-minimal.bin.gz">Tasmota minimal</a> firmware instead. Then flash the <a href="https://github.com/LocalBytes/esphome-localbytes-plug/releases/latest/download/localbytes-plug-pm.bin">full firmware</a> afterwards. 
+[A minimal firmware](https://github.com/LocalBytes/esphome-localbytes-plug/releases) is provided as an intermiediary step, as there isn't always enough space on the factory smart plugs to store the new full firmware while it is being flashed.
+
+If you're plug is currently running Tasmota, you can try flashing the <a href="http://ota.tasmota.com/tasmota/release/tasmota-minimal.bin.gz">Tasmota minimal</a> firmware instead. After which, you can flash the <a href="https://github.com/LocalBytes/esphome-localbytes-plug/releases/latest/download/localbytes-plug-pm.bin">full firmware</a>. **Do not try flashing Tasmota Minimal unless you already have Tasmota on the device.**
 
 # Calibration
 
