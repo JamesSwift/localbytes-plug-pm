@@ -24,7 +24,7 @@ esphome:
   # configuration and updates.
   project:
     name: localbytes.plug-pm
-    version: "1.6.3"
+    version: "1.6.4"
 
   on_boot:
     priority: 300
