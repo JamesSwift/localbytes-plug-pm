@@ -3,6 +3,9 @@ name: Build and Publish ESPHome firmware and website
 on:
   push:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     uses: ./.github/workflows/publish-esphome.yml
