@@ -238,6 +238,7 @@ sensor:
   # Total daily energy sensor
   - platform: total_daily_energy
     name: "Daily Energy"
+    device_class: energy
     power_id: power
     filters:
       # Multiplication factor from W to kW is 0.001
