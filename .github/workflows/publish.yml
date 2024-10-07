@@ -2,8 +2,9 @@ name: Build and Publish ESPHome firmware and website
 
 on:
   push:
-    branches:
-      - main
+
+permissions:
+  contents: write
 
 jobs:
   build:
