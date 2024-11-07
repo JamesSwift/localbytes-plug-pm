@@ -3,11 +3,16 @@ packages:
 
 esphome:
   on_boot:
+    priority: 300
     then:
+      #Signal to the template switches that their initial values have been loaded      
       - lambda: |
           if (id(voltage_multiply) <= 0) id(voltage_multiply) = 0.3;
           if (id(power_multiply) <= 0) id(power_multiply) = 0.133;
           if (id(current_multiply) <= 0) id(current_multiply) = 0.85;
+      - globals.set:
+          id: setupComplete
+          value: "true"
 
 wifi:
   power_save_mode: high
@@ -64,6 +69,11 @@ globals:
     restore_value: true
     initial_value: "0.805"
 
+  - id: setupComplete
+    type: bool
+    restore_value: no
+    initial_value: "false"
+  
 binary_sensor:
   # Push Button (Toggles Relay When Pressed)
   - platform: gpio
@@ -107,12 +117,10 @@ switch:
         condition:
           switch.is_off: disable_led
         then:
-          light.turn_on:
-            id: led
+          light.turn_on: led
     on_turn_off:
-      - light.turn_off:
-          id: led
-
+      - light.turn_off: led
+  
   - platform: template
     name: "Disable LED"
     id: disable_led
@@ -120,27 +128,35 @@ switch:
     restore_mode: "${default_state}"
     optimistic: true
     on_turn_on:
-      #Flash twice
-      - light.turn_off: led
-      - delay: 0.1s
-      - light.turn_on: led
-      - delay: 0.1s
-      - light.turn_off: led
-      - delay: 0.1s
-      - light.turn_on: led
-      - delay: 0.1s
+      - if:
+          condition:
+            lambda: 'return id(setupComplete) == true;'
+          then:
+          #Flash twice
+          - light.turn_off: led
+          - delay: 0.15s
+          - light.turn_on: led
+          - delay: 0.15s
+          - light.turn_off: led
+          - delay: 0.15s
+          - light.turn_on: led
+          - delay: 0.15s
       #Final state
       - light.turn_off: led
     on_turn_off:
-      #Flash twice
-      - light.turn_on: led
-      - delay: 0.1s
-      - light.turn_off: led
-      - delay: 0.1s
-      - light.turn_on: led
-      - delay: 0.1s
-      - light.turn_off: led
-      - delay: 0.7s
+      - if:
+          condition:
+            lambda: 'return id(setupComplete) == true;'
+          then:
+          #Flash twice
+          - light.turn_on: led
+          - delay: 0.15s
+          - light.turn_off: led
+          - delay: 0.15s
+          - light.turn_on: led
+          - delay: 0.15s
+          - light.turn_off: led
+          - delay: 1s
       #Final state
       - if:
           condition:
@@ -155,43 +171,54 @@ switch:
     restore_mode: "${default_state}"
     optimistic: true
     on_turn_on:
-      #Flash thrice
-      - light.turn_off: led
-      - delay: 0.15s
-      - light.turn_on: led
-      - delay: 0.15s
-      - light.turn_off: led
-      - delay: 0.15s
-      - light.turn_on: led
-      - delay: 0.15s
-      - light.turn_off: led
-      - delay: 0.15s
-      - light.turn_on: led
-      - delay: 0.15s
+      - if:
+          condition:
+            lambda: 'return id(setupComplete) == true;'
+          then:
+          #Flash thrice
+          - light.turn_off: led
+          - delay: 0.15s
+          - light.turn_on: led
+          - delay: 0.15s
+          - light.turn_off: led
+          - delay: 0.15s
+          - light.turn_on: led
+          - delay: 0.15s
+          - light.turn_off: led
+          - delay: 0.15s
+          - light.turn_on: led
+          - delay: 0.15s
         #Final state
       - if:
           condition:
-            switch.is_off: relay
+            or:
+              - switch.is_off: relay
+              - switch.is_on: disable_led
           then:
             light.turn_off: led
     on_turn_off:
-      #Flash thrice
-      - light.turn_on: led
-      - delay: 0.15s
-      - light.turn_off: led
-      - delay: 0.15s
-      - light.turn_on: led
-      - delay: 0.15s
-      - light.turn_off: led
-      - delay: 0.15s
-      - light.turn_on: led
-      - delay: 0.15s
-      - light.turn_off: led
-      - delay: 0.7s
+      - if:
+          condition:
+            lambda: 'return id(setupComplete) == true;'
+          then:
+          #Flash thrice
+          - light.turn_on: led
+          - delay: 0.15s
+          - light.turn_off: led
+          - delay: 0.15s
+          - light.turn_on: led
+          - delay: 0.15s
+          - light.turn_off: led
+          - delay: 0.15s
+          - light.turn_on: led
+          - delay: 0.15s
+          - light.turn_off: led
+          - delay: 1s
       #Final state
       - if:
           condition:
-            switch.is_on: relay
+            - switch.is_on: relay
+            - switch.is_off: disable_led
           then:
             light.turn_on: led
 
@@ -245,7 +272,7 @@ sensor:
       - multiply: 0.001
     unit_of_measurement: kWh
 
-# Make calibration factor data readable/setable from home assistant
+# Make calibration factor data readable/set-able from home assistant
 number:
   - platform: template
     name: "Voltage Calibration Factor"
