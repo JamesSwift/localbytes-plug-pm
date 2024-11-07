@@ -10,6 +10,12 @@ substitutions:
   # Options: `RESTORE_DEFAULT_OFF`, `RESTORE_DEFAULT_ON`, `ALWAYS_ON` & `ALWAYS_OFF`
   default_state: "RESTORE_DEFAULT_OFF"
 
+  # Default state of the "disable led" virtual switch 
+  disable_led_default_state: "RESTORE_DEFAULT_OFF"
+
+  # Default state of the "disable button"/child-lock virtual switch
+  disable_button_default_state: "RESTORE_DEFAULT_OFF"  
+
 esphome:
   name: "${name}"
   friendly_name: "${friendly_name}"
