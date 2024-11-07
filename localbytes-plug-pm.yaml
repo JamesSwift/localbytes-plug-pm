@@ -1,16 +1,5 @@
-# These substitutions allow the end user to override certain values
-substitutions:
-  # Device Names
-  name: "localbytes-plug-pm"
-  friendly_name: "Localbytes Plug PM"
-  
-  # Icon
-  main_icon: "power-socket-uk"
-
-  # Default Relay State
-  # Aka: `restore_mode` in documentation
-  # Options: `RESTORE_DEFAULT_OFF`, `RESTORE_DEFAULT_ON`, `ALWAYS_ON` & `ALWAYS_OFF`
-  default_state: "RESTORE_DEFAULT_OFF"
+packages:
+    minimal: !include minimal.yaml
 
 esphome:
   name: "${name}"
@@ -30,9 +19,13 @@ esphome:
     priority: 300
     then:
       #Signal to the template switches that their initial values have been loaded      
-      globals.set:
-        id: setupComplete
-        value: "true"
+      - lambda: |
+          if (id(voltage_multiply) <= 0) id(voltage_multiply) = 0.3;
+          if (id(power_multiply) <= 0) id(power_multiply) = 0.133;
+          if (id(current_multiply) <= 0) id(current_multiply) = 0.85;
+      - globals.set:
+          id: setupComplete
+          value: "true"
 
 esp8266:
   board: esp01_1m
@@ -44,20 +37,8 @@ logger:
 ota:
   - platform: esphome
 
-# This should point to the public location of this yaml file.
-dashboard_import:
-  package_import_url: github://JamesSwift/localbytes-plug-pm/localbytes-plug-pm.yaml@main
-
 wifi:
-  output_power: 18db
-  power_save_mode: light
-  ap:
-    ssid: "${friendly_name}"
-
-captive_portal:
-
-web_server:
-  port: 80
+  power_save_mode: high
 
 time:
   - platform: homeassistant
@@ -74,7 +55,7 @@ api:
         - number.set:
             id: voltage_factor
             value: !lambda "return id(voltage_multiply);"
-          
+
     - service: calibrate_power
       variables:
         actual_value: float
@@ -84,7 +65,7 @@ api:
         - number.set:
             id: power_factor
             value: !lambda "return id(power_multiply);"
-          
+
     - service: calibrate_current
       variables:
         actual_value: float
@@ -100,13 +81,13 @@ globals:
     type: float
     restore_value: true
     initial_value: "0.3"
-    
-  - id: power_multiply 
+
+  - id: power_multiply
     type: float
     restore_value: true
     initial_value: "0.133"
-    
-  - id: current_multiply 
+
+  - id: current_multiply
     type: float
     restore_value: true
     initial_value: "0.805"
@@ -125,7 +106,6 @@ binary_sensor:
       inverted: true
     name: "Button"
     on_click:
-
       - max_length: 1s
         then:
           if:
@@ -133,17 +113,17 @@ binary_sensor:
               switch.is_off: disable_button
             then:
               switch.toggle: relay
-      
+
       - min_length: 1.5s
         max_length: 5s
         then:
           switch.toggle: disable_led
-      
+
       - min_length: 8s
         max_length: 12s
         then:
           switch.toggle: disable_button
-          
+
   - platform: status
     name: "Server Status"
 
@@ -168,7 +148,7 @@ switch:
     name: "Disable LED"
     id: disable_led
     icon: "mdi:led-variant-off"
-    restore_mode: RESTORE_DEFAULT_OFF
+    restore_mode: "${default_state}"
     optimistic: true
     on_turn_on:
       - if:
@@ -207,13 +187,11 @@ switch:
           then:
             light.turn_on: led
 
-
-  
   - platform: template
     name: "Disable Button"
     id: disable_button
-    icon: "mdi:toggle-switch-off-outline"    
-    restore_mode: RESTORE_DEFAULT_OFF
+    icon: "mdi:toggle-switch-off-outline"
+    restore_mode: "${default_state}"
     optimistic: true
     on_turn_on:
       - if:
@@ -272,16 +250,16 @@ sensor:
   - platform: wifi_signal
     name: "WiFi Status"
     update_interval: 60s
-    
+
   # Power Monitoring
   - platform: hlw8012
+    id: power_monitor
     sel_pin:
       number: GPIO12
       inverted: true
     cf_pin: GPIO4
     cf1_pin: GPIO5
-    change_mode_every: 3
-    update_interval: 6s
+    update_interval: 10s
     
     voltage:
       name: "Voltage"
@@ -310,15 +288,14 @@ sensor:
   # Total daily energy sensor
   - platform: total_daily_energy
     name: "Daily Energy"
+    device_class: energy
     power_id: power
     filters:
       # Multiplication factor from W to kW is 0.001
       - multiply: 0.001
     unit_of_measurement: kWh
 
-    
-
-# Make calibration factor data readable/setable from home assistant
+# Make calibration factor data readable/set-able from home assistant
 number:
   - platform: template
     name: "Voltage Calibration Factor"
@@ -349,7 +326,7 @@ number:
     set_action:
       lambda: |-
         id(power_multiply) = x;
-        
+
   - platform: template
     name: "Current Calibration Factor"
     id: current_factor
@@ -365,8 +342,6 @@ number:
       lambda: |-
         id(current_multiply) = x;
 
-
-
 # Relay State LED
 output:
   - platform: esp8266_pwm
@@ -379,3 +354,9 @@ light:
   - platform: binary
     output: state_led
     id: led
+
+button:
+  - platform: restart
+    name: "Restart"
+  - platform: factory_reset
+    name: "Restart with Factory Default Settings"

@@ -1,0 +1,73 @@
+substitutions:
+  ap_timeout: "5s"
+
+packages:
+  device_base: !include localbytes-plug-pm.yaml
+
+esphome:
+  # Factory calibrate the power monitoring
+  on_boot:
+    priority: 250
+    then:
+      - if:
+          condition:
+            #Are we connected to the network
+            lambda: |-
+              return strcmp(wifi::global_wifi_component->wifi_ssid().c_str(), "LOCALBYTES_230") == 0;
+          then:
+            - switch.turn_on: relay
+            - lambda: |-
+                id(power_monitor).set_change_mode_every(4);
+                id(power_monitor).set_update_interval(250);
+            - logger.log:
+                level: INFO
+                format: "Plug calibration start"
+            - delay: 4s
+            - lambda: |-
+                id(voltage_multiply) = (230 / id(voltage).raw_state);
+                ESP_LOGI("custom", "Voltage %f -- %f",id(voltage).raw_state,id(voltage_multiply));
+
+                id(power_multiply) = (96 / id(power).raw_state);
+                ESP_LOGI("custom", "Power %f -- %f",id(power).raw_state,id(power_multiply));
+
+                id(current_multiply) = (0.42 / id(current).raw_state);
+                ESP_LOGI("custom", "Current %f -- %f",id(current).raw_state,id(current_multiply));
+
+                id(power_monitor).set_change_mode_every(8);
+                id(power_monitor).set_update_interval(10000);
+            - delay: 250ms
+            - if:
+                condition:
+                  #Is the current power reading somewhat sensible?
+                  lambda: |-
+                    ESP_LOGI("custom", "VPC: %f %f %f",id(voltage).state,id(power).state,id(current).state);
+
+                    return ((220 <= id(voltage).state) && (id(voltage).state <= 240))
+                      && ((86 <= id(power).state) && (id(power).state <= 106))
+                      && ((0.2 <= id(current).state) && (id(current).state < 0.6));
+                then:
+                  - logger.log:
+                      level: INFO
+                      format: "Plug calibration complete"
+                  - switch.turn_off: relay
+                  - light.turn_off: led
+                else:
+                  - logger.log:
+                      level: ERROR
+                      format: "Plug calibration error"
+                  - switch.turn_off: relay
+                  - light.turn_on: led
+                  - delay: 0.5s
+                  - light.turn_off: led
+                  - delay: 0.5s
+                  - light.turn_on: led
+                  - delay: 0.5s
+                  - light.turn_off: led
+                  - delay: 0.5s
+                  - light.turn_on: led
+                  - delay: 0.5s
+                  - light.turn_off: led
+                  - delay: 0.5s
+                  - light.turn_on: led
+                  - delay: 0.5s
+                  - light.turn_off: led

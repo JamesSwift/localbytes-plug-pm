@@ -1,0 +1,45 @@
+# These substitutions allow the end user to override certain values
+substitutions:
+  # Device Names
+  name: "localbytes-plug-pm"
+  friendly_name: "Localbytes Plug PM"
+  main_icon: "power-socket-uk"
+
+  # Default Relay State
+  # Aka: `restore_mode` in documentation
+  # Options: `RESTORE_DEFAULT_OFF`, `RESTORE_DEFAULT_ON`, `ALWAYS_ON` & `ALWAYS_OFF`
+  default_state: "RESTORE_DEFAULT_OFF"
+
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+
+  # Automatically add the mac address to the name
+  # so you can use a single firmware for all devices
+  name_add_mac_suffix: true
+
+  project:
+    name: localbytes.plug-pm
+    version: "1.2.0"
+
+esp8266:
+  board: esp01_1m
+  restore_from_flash: true
+  early_pin_init: false
+
+logger:
+
+ota:
+  platform: esphome
+
+api:
+
+# This should point to the public location of this yaml file.
+dashboard_import:
+  package_import_url: github://LocalBytes/esphome-localbytes-plug/localbytes-plug-pm.yaml@main
+
+wifi:
+  ap:
+    ssid: "${friendly_name}"
+
+captive_portal:
