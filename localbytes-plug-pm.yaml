@@ -2,19 +2,6 @@ packages:
     minimal: !include minimal.yaml
 
 esphome:
-  name: "${name}"
-  friendly_name: "${friendly_name}"
-
-  # Automatically add the mac address to the name
-  # so you can use a single firmware for all devices
-  name_add_mac_suffix: true
-
-  # This will allow for (future) project identification,
-  # configuration and updates.
-  project:
-    name: localbytes.plug-pm
-    version: "1.6.4"
-
   on_boot:
     priority: 300
     then:
@@ -26,16 +13,6 @@ esphome:
       - globals.set:
           id: setupComplete
           value: "true"
-
-esp8266:
-  board: esp01_1m
-  restore_from_flash: true
-  early_pin_init: false
-
-logger:
-
-ota:
-  - platform: esphome
 
 wifi:
   power_save_mode: high
