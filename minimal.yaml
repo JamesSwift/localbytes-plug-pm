@@ -13,7 +13,7 @@ substitutions:
   # Default state of the "disable led" virtual switch 
   disable_led_default_state: "RESTORE_DEFAULT_OFF"
 
-# Default state of the "disable button"/child-lock virtual switch
+  # Default state of the "disable button"/child-lock virtual switch
   disable_button_default_state: "RESTORE_DEFAULT_OFF"  
 
 esphome:
