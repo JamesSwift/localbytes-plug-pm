@@ -42,7 +42,7 @@ wifi:
 
 # Firmware File Too Big
 
-As there isn't enough space left on the factory smart plugs to store new firmware while it is being flashed. You can try flashing the <a href="http://ota.tasmota.com/tasmota/release/tasmota-minimal.bin.gz">Tasmota minimal</a> firmware first, before then building and flashing this project. 
+If there isn't enough space left on the factory smart plugs to store new firmware while it is being flashed, you can try flashing the <a href="http://ota.tasmota.com/tasmota/release/tasmota-minimal.bin.gz">Tasmota minimal</a> firmware first, before then building and flashing this project. 
 
 # Calibration
 
