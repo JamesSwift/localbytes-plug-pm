@@ -2,10 +2,9 @@
 
 This is an ESPHome firmware for the Localbytes smart plug, which was originally sold pre-loaded with tasmota. This firmware supports the original 10A plug and the upgraded 13A plug. <a href="https://www.mylocalbytes.com/products/smart-plug-pm?variant=41600621510847">You can buy these smart plugs here</a>.
 
-## INstallation
+## Installation
 
-You can use the following YAML to add the device to your ESPHome setup.  
-Please note this does not enable [API Encryption](https://esphome.io/components/api#configuration-variables) or [OTA Password](https://esphome.io/components/ota.html#configuration-variables).
+You can use the following YAML to create the firmware in ESPHome. If converting from tastmota, you will need to compile and flash the [minimal](https://github.com/JamesSwift/localbytes-plug-pm/blob/main/minimal.yaml) firmware first as an intermediary step, as the full firmware file is too big to fit on the device alongside tasmota.
 
 ```yaml
 substitutions:
