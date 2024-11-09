@@ -10,10 +10,10 @@ Please note this does not enable [API Encryption](https://esphome.io/components/
 ```yaml
 substitutions:
   name: localbytes-plug-pm-<NAME>
-  friendly_name: Localbytes Plug PM <NAME>
+  friendly_name: LocalBytes Plug PM <NAME>
 
 packages:
-  localbytes.plug-pm: github://JamesSwift/localbytes-plug-pm/localbytes-plug-pm.yaml@main
+  jamesswift.localbytes-plug-pm: github://JamesSwift/localbytes-plug-pm/localbytes-plug-pm.yaml@main
 
 esphome:
   name: ${name}
