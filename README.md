@@ -2,10 +2,10 @@
 
 This is an ESPHome firmware for the Localbytes smart plug, which was originally sold pre-loaded with tasmota. This firmware supports the original 10A plug and the upgraded 13A plug. <a href="https://www.mylocalbytes.com/products/smart-plug-pm?variant=41600621510847">You can buy these smart plugs here</a>.
 
-## Manual Addition
+## INstallation
 
 You can use the following YAML to add the device to your ESPHome setup.  
-Please note this does not enable [API Encryption](https://esphome.io/components/api#configuration-variables) or [OTA Password](https://esphome.io/components/ota.html#configuration-variables)
+Please note this does not enable [API Encryption](https://esphome.io/components/api#configuration-variables) or [OTA Password](https://esphome.io/components/ota.html#configuration-variables).
 
 ```yaml
 substitutions:
@@ -38,11 +38,6 @@ wifi:
 <img src="https://user-images.githubusercontent.com/2080205/169600703-0ddfab3f-5309-4dd7-bd22-87a6d4d0ecb1.png" width="45%" /> 
 <img src="https://user-images.githubusercontent.com/2080205/168430744-598f9d21-c1ce-4fce-9076-8fca26c62be8.png" width="45%" />
 <img src="https://user-images.githubusercontent.com/2080205/168430637-ae9f14c6-57a8-4f3f-8a85-1f35966b43bd.png" width="45%" />
-
-
-# Firmware File Too Big
-
-If there isn't enough space left on the factory smart plugs to store new firmware while it is being flashed, you can try flashing the <a href="http://ota.tasmota.com/tasmota/release/tasmota-minimal.bin.gz">Tasmota minimal</a> firmware first, before then building and flashing this project. 
 
 # Calibration
 
