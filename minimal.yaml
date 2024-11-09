@@ -25,7 +25,7 @@ esphome:
   name_add_mac_suffix: true
 
   project:
-    name: localbytes.plug-pm
+    name: jamesswift.localbytes_plug_pm
     version: "1.8.0"
 
 esp8266:
